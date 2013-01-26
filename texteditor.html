@@ -193,6 +193,7 @@
 	    			else {
 	    				cursorY -= 1;
 	    			}
+	    			evt.preventDefault();
 	    			break;
 	    		case 37:
 	    			if (cursorX == 0) {
@@ -207,6 +208,7 @@
 	    			else {
 	    				cursorX -= 1;
 	    			}
+	    			evt.preventDefault();
 	    			break;
 	    		case 40:
 	    			if (cursorY == lineA.length) {
@@ -215,6 +217,7 @@
 	    			else {
 	    				cursorY += 1;
 	    			}
+	    			evt.preventDefault();
 	    			break;
 	    		case 39:
 	    			if (cursorX == lineA[cursorY].length) {
@@ -229,6 +232,7 @@
 	    			else {
 	    				cursorX += 1;
 	    			}
+	    			evt.preventDefault();
 	    			break;
 	    		case 8: // Backspace
 	    			if (cursorX == 0) {
@@ -248,6 +252,7 @@
 					specialA[cursorY] = specialA[cursorY].substring(0,cursorX-1) + specialA[cursorY].substring(cursorX);
 					cursorX--;
 					}
+					evt.preventDefault();
 					writeCanvas();
 					break;
 				case 13: //Enter
@@ -259,12 +264,15 @@
 					specialA.splice(cursorY+1,0,newspecialline);
 					cursorY += 1;
 					cursorX = 0;
+					evt.preventDefault();
 					break;
 				case 36: //Home
 					cursorX = 0;
+					evt.preventDefault();
 					break;
 				case 35: //End
 					cursorX = lineA[cursorY].length;
+					evt.preventDefault();
 					break;
 	    		default:
 
@@ -292,7 +300,9 @@
 					//console.log(specialA[cursorY]);
 					cursorX += 1;
 					writeCanvas();
-
+					if (evt.which == 32) {
+						evt.preventDefault();
+					}
 	    	}
 	    }
 	};
