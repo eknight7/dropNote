@@ -357,6 +357,7 @@
 	};
 	document.onkeypress = function(evt) {
 	    evt = evt || window.event;
+	    console.log(evt.which);
 	    if (evt.ctrlKey == false) {
 	    	clearCursor();
 	    	switch(evt.which) {
