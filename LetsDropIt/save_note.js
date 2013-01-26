@@ -25,6 +25,10 @@ $(document).ready(function(){
             e.preventDefault();
             deleteFile(client);
         });
+        $("#readFile").on('click',function(e){
+            e.preventDefault();
+            readFile(client);
+        });
         // Replace with a call to your own application code.
         //
         // The user authorized your app, and everything went well.
@@ -125,7 +129,22 @@ $(document).ready(function(){
             });
         }
         else{
-            slert("Not deleting any file!");
+            alert("Not deleting any file!");
+        }
+    };
+
+    //read a file from the Dropbox account
+    var readFile = function(client){
+        var filename = prompt("Enter absolute path of dropbox file?");
+        if (filename.length){
+            client.readFile(filename, function(error,stat) {
+                if (error){
+                    return showError(error); // Cannot read the file :(
+                }
+            });
+        }
+        else{
+            alert("Not loading any file!");
         }
     };
 
