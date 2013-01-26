@@ -82,8 +82,14 @@
 	};
 	function resizeCanvas() {
 		//var canvas = document.getElementById("canvas1");
-		canvas.width = window.innerWidth - topLeftX;
-		canvas.height = window.innerHeight - topLeftY;
+		newwidth = window.innerWidth - topLeftX;
+		newheight = window.innerHeight - topLeftY;
+		if (newwidth > canvas.width) {
+			canvas.width = newwidth;
+		}
+		if (newheight > canvas.height) {
+			canvas.height = newheight;
+		}
 		writeCanvas();
 	}
 	function fixCursor() {
@@ -125,6 +131,10 @@
 				currY += (nextlines-1)*charHeight;
 			}
 			else {
+				var width = ctx.measureText(line).width + topLeftX;
+				if (width > canvas.width) {
+					canvas.width = width;
+				}
 				for (j = 0; j < line.length; j++) {
 					if (specialA[i][j] == "N") {
 						ctx.font = basefont;
@@ -326,6 +336,8 @@
 	</script>
 </head>
 <body onLoad="initListen();">
+<input type="button" value="Previous Page" onClick="prevPage();"/>
+<input type="button" value="Next Page" onClick="nextPage();"/>
 <input type="button" value="Export to text file" onClick="exportFile();"/>
 <a href="javascript:boldToggle();"><b>B</b></a>
 <a href="javascript:italicToggle();"><i>I</i></a>
