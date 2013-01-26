@@ -1,18 +1,23 @@
 <html>
 <head>
 	<style type = "text/css">
-	.inputnote {width:90%;height:85%;text-align:top;}
+	textarea {width:90%;
+		height:85%;
+		vertical-align:top;
+	}
 	</style>
 	<script>
 		var glNoteId = window.name;
 		var firstOpenFlag = true;
-		var clearNote = function() {
-			if (firstOpenFlag) {
-				firstOpenFlag = false;
-				noteForm = document.forms['noteform'];
-				noteForm.elements["note"].value = "";
-			}
-		};
+		/*
+		//var clearNote = function() {
+		//	if (firstOpenFlag) {
+		//		firstOpenFlag = false;
+		//		noteForm = document.forms['noteform'];
+		//		noteForm.elements["note"].value = "";
+		//	}
+		//};
+		*/
 		var saveNote = function() {
 			//SAVE HERE
 			//glNoteId is the noteId that we want to save to
@@ -23,7 +28,7 @@
 </head>
 <body>
 	<form action="" method="post" name="noteform">
-		Note: <input id="notecontents" type="text" value="Type your notes here..." name="note" onclick="clearNote();" class="inputnote"> <br>
+		Note: <textarea id="notecontents"></textarea> <br>
 
 		Upload Image: <input id="file" type="file" name="fileupload" class="image"/><br>
 		<input type="image" src="savebutton.png" height="10%" width="9%" onclick="saveNote();"/>

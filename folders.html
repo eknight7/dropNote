@@ -8,7 +8,7 @@
 	notelist[1] = "Note 1";
 	notelist[2] = "Note 2";
 	var openNote = function (noteIndex) {
-		window.name = noteIndex.toString;
+		window.name = notelist[noteIndex];
 		document.getElementById("noteliststatus").innerHTML = "Opening note " + noteIndex + " <br>";
 	};
 	for (i=0;i<notelist.length;i++) {

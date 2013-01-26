@@ -3,32 +3,50 @@
 	<script>
 	var cursorX = 0;
 	var cursorY = 0;
+	var TopLeftX = 50;
+	var TopLeftY = 50;
+	var LineHeight = 40;
+	var canvas;
+	var ctx;
+	glNoteId = parseInt(window.name);
+	var buffer = getNoteContents(glNoteId);
 	function getNoteContents(noteId) {
-		return "TestNoteContents";
+		return "TestNoteContents\nBuggy buggy!!\nI'm a butterfly!\nI'm a ladybird!\nI'm all around your code and computer!!\n";
 	}
 	function initListen() {
-		glNoteId = parseInt(window.name);
-		var buffer = getNoteContents(glNoteId);
-		var canvas = document.getElementById("canvas1");
+
+		canvas = document.getElementById("canvas1");
 		ctx = canvas.getContext('2d');
 		window.addEventListener('resize', resizeCanvas, false);
 		canvas.addEventListener("mousedown", mouseDownHandler, false);
 		resizeCanvas();
 	};
 	function resizeCanvas() {
-		var canvas = document.getElementById("canvas1");
+		//var canvas = document.getElementById("canvas1");
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
+		writeCanvas(buffer);
+	}
+	function writeCanvas(buffer) {
+		ctx.font = "30px Arial";
+		var currX = TopLeftX;
+		var currY = TopLeftY;
+		lineArray = buffer.match(/[^\r\n]+/g);
+		for (i = 0; i < lineArray.length; i++) {
+			var txt = lineArray[i];
+			var lineWidth = ctx.measureText(txt).width;
+			ctx.fillText(txt,currX,currY);
+			currX = TopLeftX;
+			currY += 40;
+		}
 	}
 	function mouseDownHandler(event) {
-		alert("blah");
 		mouseX = event.pageX;
 		mouseY = event.pageY;
 		cursorX = mouseX/divisor;
 		cursorY = mouseX/divisor;
 	}
 	function keyDownHandler(event) {
-		alert("blah2");
 		var keyCode = event.keyBode;
 		switch(keyCode)
 		{
@@ -44,7 +62,7 @@
 	</script>
 </head>
 <body onLoad="initListen();">
-<canvas width="100%" height="100%" id="canvas1" style="border:1px solid #FF0000;">
+<canvas width="100%" height="100%" id="canvas1" style="position: absolute; left: 0; top: 0; z-index: 0;border:1px solid #FF0000;">
 </canvas>
 </body>
 </html>
