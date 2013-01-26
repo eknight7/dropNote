@@ -1,5 +1,8 @@
 <html>
 <head>
+	<script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="dropbox.min.js"></script>
+    <script type="text/javascript" src="save_note.js"></script>
 	<script>
 	var topLeftX = 0;
 	var topLeftY = 50;
@@ -17,10 +20,11 @@
 	var ctx;
 	var cursorToggle = true;
 	var mode = "N";
-	glNoteId = parseInt(window.name);
-	unpackData(getNoteContents(glNoteId));
 	var lineA;
 	var specialA;
+
+
+
 	function exportFile() {
 		var saveContent = lineA.join("\n");
 		var saveContent2 = specialA.join("\n");
@@ -38,9 +42,16 @@
 		textlength = parseInt(data);
 		lengthtextlength = textlength.toString().length+1;
 		lineA = data.substring(lengthtextlength,lengthtextlength+textlength).match(/[^\r\n]+/g);
-		//console.log(lineA);
+		console.log(lineA);
 		specialA = data.substring(lengthtextlength+textlength).match(/[^\r\n]+/g);
-		//console.log(specialA);
+		console.log(specialA);
+		canvas = document.getElementById("canvas1");
+		ctx = canvas.getContext('2d');
+		window.addEventListener('resize', resizeCanvas, false);
+		canvas.addEventListener("mousedown", mouseDownHandler, false);
+		resizeCanvas();
+		initCharWidth();
+		window.setInterval("drawCursor();",1000);
 	}
 	function initCharWidth () {
 		ctx.font = font;
@@ -72,13 +83,8 @@
 		drawCursor();
 	}
 	function initListen() {
-		canvas = document.getElementById("canvas1");
-		ctx = canvas.getContext('2d');
-		window.addEventListener('resize', resizeCanvas, false);
-		canvas.addEventListener("mousedown", mouseDownHandler, false);
-		resizeCanvas();
-		initCharWidth();
-		window.setInterval("drawCursor();",1000);
+		callOnLoad();
+		readFile(client);
 	};
 	function resizeCanvas() {
 		//var canvas = document.getElementById("canvas1");
@@ -343,6 +349,19 @@
 		}
 		//console.log(mode);
 	}
+	/*
+	function insertImage() {
+		pixX = 0;
+		pixY = 0;
+		imageName = "";
+		lines = pixY/charHeight;
+		picFormat = "P"+pixX+pixY
+		lineA.splice(currY,1,"")
+		for (int i = 0; i < lines - 1; i++) {
+			lineA.splice()
+		}
+	}
+	*/
 	</script>
 </head>
 <body onLoad="initListen();">
