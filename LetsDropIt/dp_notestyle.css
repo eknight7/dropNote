@@ -4,3 +4,35 @@ textarea{
     vertical-align:top;
 }
 
+#mkdir{
+    width : 90px;
+    height: 60px;
+    background-color: #00BFFF;
+    color: #FFFFFF;
+    border-radius: 5px;
+    border: 4px solid #4169E1;
+    font-family: Verdana, Arial, Sans-Serif;
+    font-size:1em;
+    font-weight:bold;
+    text-align:center;
+    display: inline block;
+    position:relative;
+    top:20px;
+    cursor:pointer;
+}
+
+#textbox{
+    cursor:pointer;
+    width : 70px;
+    height: 60px;
+    background-color: #00BFFF;
+    color: #FFFFFF;
+    border-radius: 5px;
+    border: 4px solid #4169E1;
+    font-family: Verdana, Arial, Sans-Serif;
+    font-size:1em;
+    font-weight:bold;
+    text-align:center;
+    display: inline block;
+
+}
