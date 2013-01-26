@@ -1,0 +1,23 @@
+<html>
+<head>
+	Note List:<br>
+	<script>
+	// notelist should be replaced by the file list of the notes directory in the DropBox
+	var notelist = new Array();
+	notelist[0] = "Note 0";
+	notelist[1] = "Note 1";
+	notelist[2] = "Note 2";
+
+
+	var openNote = function (noteIndex) {
+		document.getElementById("noteliststatus").innerHTML = "Opening note " + noteIndex + " <br>";
+	};
+	for (i=0;i<notelist.length;i++) {
+		document.write("<a href='javascript:void(0)' onclick='openNote(" + i + ");'> " + notelist[i]+"</a><br>");
+	}
+	</script>
+</head>
+<body>
+	<div id="noteliststatus"></div>
+</body>
+</html>

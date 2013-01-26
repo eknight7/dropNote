@@ -1,0 +1,18 @@
+<html>
+<head>
+	<style type = "text/css">
+	.inputnote {width:90%;height:90%;text-align:top;}
+	</style>
+	<script>
+		var clearNote = function() {
+			noteForm = document.forms['noteform'];
+			noteForm.elements["note"].value = "";
+		};
+	</script>
+</head>
+<body>
+	<form action="" method="post" name="noteform">
+		Note: <input type="text" value="Type your notes here..." name="note" onclick="clearNote();" class="inputnote"> <br>
+		<input type="button" value="Save" onclick="save();">
+	</form>
+</body>

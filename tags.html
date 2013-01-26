@@ -1,0 +1,23 @@
+<html>
+<head>
+	tag List:<br>
+	<script>
+	// list should be replaced by the file list of the tags directory in the DropBox
+	var taglist = new Array();
+	taglist[0] = "tag 0";
+	taglist[1] = "tag 1";
+	taglist[2] = "tag 2";
+
+
+	var opentag = function (tagIndex) {
+		document.getElementById("tagstatus").innerHTML = "Opening tag " + tagIndex + " <br>";
+	};
+	for (i=0;i<taglist.length;i++) {
+		document.write("<a href='javascript:void(0)' onclick='opentag(" + i + ");'> " + taglist[i]+"</a><br>");
+	}
+	</script>
+</head>
+<body>
+	<div id="tagstatus"></div>
+</body>
+</html>
