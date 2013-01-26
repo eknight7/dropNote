@@ -22,7 +22,7 @@
 	var mode = "N";
 	var lineA;
 	var specialA;
-
+	var imageHash = {};
 
 
 	function exportFile() {
@@ -94,14 +94,20 @@
 			cursorX = 0;
 		}
 	}
-	function displayfinalimage(strData,currX,currY) {
+	function displayfinalimage(strData,currX,currY,imagename) {
 		var imageObj = new Image();
 		imageObj.onload = function() {
 			ctx.drawImage(imageObj,currX,currY);
 		}
 		imageObj.src = strData;
+		imageHash[imagename] = imageObj;
 	}
 	function helperImage(imagename,currX,currY) {
+		if (imageHash.hasOwnProperty(imagename)) {
+			var imageObj = imageHash[imagename];
+			ctx.drawImage(imageObj,currX,currY);
+			return;
+		}
 		console.log(imagename);
 		var h = new Object();
 		h['download'] = true;
@@ -110,7 +116,7 @@
                     return showError(error); // Cannot read the file :(
                 }
                 else{
-                    displayfinalimage(publicUrl.url,currX,currY);
+                    displayfinalimage(publicUrl.url,currX,currY,imagename);
                 }
             });
 	}
