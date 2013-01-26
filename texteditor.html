@@ -1,0 +1,50 @@
+<html>
+<head>
+	<script>
+	var cursorX = 0;
+	var cursorY = 0;
+	function getNoteContents(noteId) {
+		return "TestNoteContents";
+	}
+	function initListen() {
+		glNoteId = parseInt(window.name);
+		var buffer = getNoteContents(glNoteId);
+		var canvas = document.getElementById("canvas1");
+		ctx = canvas.getContext('2d');
+		window.addEventListener('resize', resizeCanvas, false);
+		canvas.addEventListener("mousedown", mouseDownHandler, false);
+		resizeCanvas();
+	};
+	function resizeCanvas() {
+		var canvas = document.getElementById("canvas1");
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+	}
+	function mouseDownHandler(event) {
+		alert("blah");
+		mouseX = event.pageX;
+		mouseY = event.pageY;
+		cursorX = mouseX/divisor;
+		cursorY = mouseX/divisor;
+	}
+	function keyDownHandler(event) {
+		alert("blah2");
+		var keyCode = event.keyBode;
+		switch(keyCode)
+		{
+		}
+	}
+	document.onkeydown = function(evt) {
+	    evt = evt || window.event;
+	    alert("blah2");
+	    if (evt.ctrlKey && evt.keyCode == 90) {
+	        alert("Ctrl-Z");
+	    }
+	};
+	</script>
+</head>
+<body onLoad="initListen();">
+<canvas width="100%" height="100%" id="canvas1" style="border:1px solid #FF0000;">
+</canvas>
+</body>
+</html>
