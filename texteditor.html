@@ -6,6 +6,8 @@
 	<script>
 	var topLeftX = 0;
 	var topLeftY = 50;
+	var propX = 0.7;
+	var propY = 0.7;
 	var mouseYoffset = 30;
 	var cursorX = 0;
 	var cursorY = 0;
@@ -23,7 +25,16 @@
 	var lineA;
 	var specialA;
 	var imageHash = {};
-
+	function updateFont() {
+		console.log("Fire11");
+		basefont = document.getElementById("fontsize").value+"px "+document.getElementById("fontname").value;
+		font = basefont;
+		boldfont = "bold " + basefont;
+		italicfont = "italic " + basefont;
+		bolditalicfont = "bold italic " + basefont;
+		initCharWidth();
+		writeCanvas();
+	}
 
 	function exportFile() {
 		var saveContent = lineA.join("\n");
@@ -70,8 +81,8 @@
 	};
 	function resizeCanvas() {
 		//var canvas = document.getElementById("canvas1");
-		newwidth = window.innerWidth - topLeftX;
-		newheight = window.innerHeight - topLeftY;
+		newwidth = window.innerWidth * propX - topLeftX;
+		newheight = window.innerHeight * propY - topLeftY;
 		if (newwidth > canvas.width) {
 			canvas.width = newwidth;
 		}
@@ -366,6 +377,15 @@
 <input type="button" value="Previous Page" onClick="prevPage();"/>
 <input type="button" value="Next Page" onClick="nextPage();"/>
 <input type="button" value="Export to text file" onClick="exportFile();"/>
+<select id="fontname" name="mydropdown" onChange="updateFont();">
+<option value="Courier">Courier</option>
+<option value="Lucida Console">Lucida Console</option>
+<option value="Arial">Arial</option>
+<option value="Monaco">Monaco</option>
+<option value="Times New Roman">Times New Roman</option>
+<option value="Consolas">Consolas</option>
+</select>
+<input id="fontsize" type="text" value="20" onBlur="updateFont();">
 <a href="javascript:boldToggle();"><b>B</b></a>
 <a href="javascript:italicToggle();"><i>I</i></a>
 Insert Picture: <input id="file" type="file" name="fileupload" class="image" value="Insert Image"/><br>
