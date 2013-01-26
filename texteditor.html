@@ -18,31 +18,49 @@
 	var cursorToggle = true;
 	var mode = "N";
 	glNoteId = parseInt(window.name);
-	var buffer = getNoteContents(glNoteId);
-	var lineA = buffer.match(/[^\r\n]+/g);
-	var specialA = new Array();
-	for (i = 0; i < lineA.length; i++) {
-		specialA[i] = Array(lineA[i].length+1).join("N");
-	}
+	unpackData(getNoteContents(glNoteId));
+	var lineA;
+	var specialA;
 	function exportFile() {
 		var saveContent = lineA.join("\n");
 		var saveContent2 = specialA.join("\n");
-		var finalString = (saveContent.length).toString+"\n"+saveContent+"\n"+saveContent2;
+		var finalString = (saveContent.length).toString()+"\n"+saveContent+"\n"+saveContent2;
 		var exportContent = "data:application/octet-stream," + encodeURIComponent(finalString);
 		newWindow=window.open(exportContent, 'Exported file');
 	}
 	function saveToDropBox() {
 		var saveContent = lineA.join("\n");
 		var saveContent2 = specialA.join("\n");
-		var finalString = (saveContent.length).toString+"\n"+saveContent+"\n"+saveContent2;
+		var finalString = (saveContent.length).toString()+"\n"+saveContent+"\n"+saveContent2;
 		//Saving code of finalString goes here!
+	}
+	function unpackData(data) {
+		textlength = parseInt(data);
+		lengthtextlength = textlength.toString().length+1;
+		lineA = data.substring(lengthtextlength,lengthtextlength+textlength).match(/[^\r\n]+/g);
+		//console.log(lineA);
+		specialA = data.substring(lengthtextlength+textlength).match(/[^\r\n]+/g);
+		//console.log(specialA);
 	}
 	function initCharWidth () {
 		ctx.font = font;
 		charWidth = ctx.measureText("M").width;
 	}
 	function getNoteContents(noteId) {
-		return "TestNoteContents\nBuggy buggy!! I'm a Bug!\nI'm a butterfly!\nI'm a ladybird!\nI'm all around your code and computer!!\n";
+		var saveContent = "TestNoteContents\nBuggy buggy!! I'm a Bug!\nI'm a butterfly!\nI'm a ladybird!\nP\n \n \n \nP\n \n \n \nI'm all around your code and computer!!";
+		saveContentSplit = saveContent.match(/[^\r\n]+/g);
+		saveContent2Split = new Array();
+		for (i = 0; i < saveContentSplit.length; i++) {
+			if (saveContentSplit[i][0] == "P") {
+				saveContent2Split[i] = "P100150test1.png";
+			}
+			else {
+				saveContent2Split[i] = Array(saveContentSplit[i].length+1).join("N");
+			}
+		}
+		saveContent2 = saveContent2Split.join("\n");
+		var finalString = (saveContent.length).toString()+"\n"+saveContent+"\n"+saveContent2;
+		return finalString;
 	}
 	function mouseDownHandler(event) {
 		clearCursor();
@@ -66,7 +84,7 @@
 		//var canvas = document.getElementById("canvas1");
 		canvas.width = window.innerWidth - topLeftX;
 		canvas.height = window.innerHeight - topLeftY;
-		writeCanvas(buffer);
+		writeCanvas();
 	}
 	function fixCursor() {
 		if (cursorY > lineA.length-1) {
@@ -82,6 +100,13 @@
 			cursorX = 0;
 		}
 	}
+	function helperImage(imagename,currX,currY) {
+		var imageObj = new Image();
+		imageObj.onload = function() {
+			ctx.drawImage(imageObj,currX,currY);
+		}
+		imageObj.src = imagename;
+	}
 	function writeCanvas() {
 		initCharWidth();
 		ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -90,22 +115,33 @@
 		var currY = topLeftY;
 		for (i = 0; i < lineA.length; i++) {
 			var line = lineA[i];
-			for (j = 0; j < line.length; j++) {
-				if (specialA[i][j] == "N") {
-					ctx.font = basefont;
+			if (specialA[i][0] == "P") {
+				var height = parseInt(specialA[i].substring(1,4));
+				var width = parseInt(specialA[i].substring(4,7));
+				var imagename = specialA[i].substring(7);
+				nextlines = Math.ceil(height/charHeight);
+				helperImage(imagename,currX,currY-charHeight);
+				i += (nextlines-1);
+				currY += (nextlines-1)*charHeight;
+			}
+			else {
+				for (j = 0; j < line.length; j++) {
+					if (specialA[i][j] == "N") {
+						ctx.font = basefont;
+					}
+					else if (specialA[i][j] == "B"){
+						ctx.font = boldfont;
+					}
+					else if (specialA[i][j] == "I"){
+						ctx.font = italicfont;
+					}
+					else if (specialA[i][j] == "C"){
+						ctx.font = bolditalicfont;
+					}
+					//console.log(specialA[i][j]);
+					ctx.fillText(lineA[i][j],currX,currY);
+					currX += charWidth;
 				}
-				else if (specialA[i][j] == "B"){
-					ctx.font = boldfont;
-				}
-				else if (specialA[i][j] == "I"){
-					ctx.font = italicfont;
-				}
-				else if (specialA[i][j] == "C"){
-					ctx.font = bolditalicfont;
-				}
-				//console.log(specialA[i][j]);
-				ctx.fillText(lineA[i][j],currX,currY);
-				currX += charWidth;
 			}
 			currX = topLeftX;
 			currY += charHeight;
@@ -136,7 +172,7 @@
 	};
 	document.onkeydown = function(evt) {
 	    evt = evt || window.event;
-	    console.log(evt.ctrlKey + " " + evt.keyCode);
+	    //console.log(evt.ctrlKey + " " + evt.keyCode);
 	    if (evt.ctrlKey == false) {
 	    	clearCursor();
 	    	switch(evt.keyCode) {
@@ -185,16 +221,30 @@
 	    			}
 	    			break;
 	    		case 8: // Backspace
+	    			if (cursorX == 0) {
+	    				if (cursorY == 0) {
+	    					//Do nothing
+	    				}
+	    				else {
+	    					cursorY--;
+	    					cursorX = lineA[cursorY].length;
+	    					lineA[cursorY] = lineA[cursorY] + lineA[cursorY+1];
+	    					lineA.splice(cursorY+1,1);
+
+	    				}
+	    			}
+	    			else {
 					lineA[cursorY] = lineA[cursorY].substring(0,cursorX-1) + lineA[cursorY].substring(cursorX);
 					specialA[cursorY] = specialA[cursorY].substring(0,cursorX-1) + specialA[cursorY].substring(cursorX);
 					cursorX--;
+					}
 					writeCanvas();
 					break;
 				case 13: //Enter
-					newline = lineA[cursorY].substring(cursorX+1);
-					newspecialline = specialA[cursorY].substring(cursorX+1);
-					lineA[cursorY] = lineA[cursorY].substring(0,cursorX+1);
-					specialA[cursorY] = specialA[cursorY].substring(0,cursorX+1);
+					newline = lineA[cursorY].substring(cursorX);
+					newspecialline = specialA[cursorY].substring(cursorX);
+					lineA[cursorY] = lineA[cursorY].substring(0,cursorX);
+					specialA[cursorY] = specialA[cursorY].substring(0,cursorX);
 					lineA.splice(cursorY+1,0,newline);
 					specialA.splice(cursorY+1,0,newspecialline);
 					cursorY += 1;
@@ -216,7 +266,7 @@
 	};
 	document.onkeypress = function(evt) {
 	    evt = evt || window.event;
-	    console.log("keyPress:" + evt.which + " " + evt.keyCode);
+	    //console.log("keyPress:" + evt.which + " " + evt.keyCode);
 	    if (evt.ctrlKey == false) {
 	    	clearCursor();
 	    	switch(evt.which) {
