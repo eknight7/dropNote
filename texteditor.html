@@ -66,8 +66,6 @@
 		ctx.font = font;
 		charWidth = ctx.measureText("M").width;
 	}
-<<<<<<< HEAD
-=======
 	function getNoteContents(noteId) {
 		var saveContent = "TestNoteContents\nBuggy buggy!! I'm a Bug!\nI'm a butterfly!\nI'm a ladybird!\nP\n \n \n \nP\n \n \n \nI'm all around your code and computer!!";
 		saveContentSplit = saveContent.match(/[^\r\n]+/g);
@@ -85,7 +83,6 @@
 		var finalString = (saveContent.length).toString()+"\n"+saveContent+"\n"+saveContent2;
 		return finalString;
 	}
->>>>>>> working with textEdit
 	function mouseDownHandler(event) {
 		clearCursor();
 		mouseX = event.pageX;
@@ -96,10 +93,8 @@
 		drawCursor();
 	}
 	function initListen() {
-<<<<<<< HEAD
 		callOnLoad();
 		readFile(client);
-=======
 		canvas = document.getElementById("canvas1");
 		ctx = canvas.getContext('2d');
 		window.addEventListener('resize', resizeCanvas, true);
@@ -107,7 +102,6 @@
 		resizeCanvas();
 		initCharWidth();
 		window.setInterval("drawCursor();",1000);
->>>>>>> working with textEdit
 	};
 	function resizeCanvas() {
 		//var canvas = document.getElementById("canvas1");
