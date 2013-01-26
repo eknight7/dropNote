@@ -145,11 +145,7 @@ function callOnLoad() {
                     return showError(error); // Cannot read the file :(
                 }
                 else{
-<<<<<<< HEAD
                     unpackData(strData);
-=======
-                    $("#notecontents")[0].value = strData;
->>>>>>> working with textEdit
                 }
             });
         }
