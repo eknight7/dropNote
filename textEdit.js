@@ -1,13 +1,6 @@
-<html>
-<head>
-	<script type="text/javascript" src="jquery.js"></script>
-    <script type="text/javascript" src="dropbox.min.js"></script>
-    <script type="text/javascript" src="save_note.js"></script>
-	<script>
+$(document).read(function){
 	var topLeftX = 0;
 	var topLeftY = 50;
-	var propX = 0.7;
-	var propY = 0.7;
 	var mouseYoffset = 30;
 	var cursorX = 0;
 	var cursorY = 0;
@@ -22,20 +15,10 @@
 	var ctx;
 	var cursorToggle = true;
 	var mode = "N";
+	glNoteId = parseInt(window.name);
+	unpackData(getNoteContents(glNoteId));
 	var lineA;
 	var specialA;
-	var imageHash = {};
-	function updateFont() {
-		console.log("Fire11");
-		basefont = document.getElementById("fontsize").value+"px "+document.getElementById("fontname").value;
-		font = basefont;
-		boldfont = "bold " + basefont;
-		italicfont = "italic " + basefont;
-		bolditalicfont = "bold italic " + basefont;
-		initCharWidth();
-		writeCanvas();
-	}
-
 	function exportFile() {
 		var saveContent = lineA.join("\n");
 		var saveContent2 = specialA.join("\n");
@@ -53,26 +36,18 @@
 		textlength = parseInt(data);
 		lengthtextlength = textlength.toString().length+1;
 		lineA = data.substring(lengthtextlength,lengthtextlength+textlength).match(/[^\r\n]+/g);
+		//console.log(lineA);
 		specialA = data.substring(lengthtextlength+textlength).match(/[^\r\n]+/g);
-		canvas = document.getElementById("canvas1");
-		ctx = canvas.getContext('2d');
-		window.addEventListener('resize', resizeCanvas, false);
-		canvas.addEventListener("mousedown", mouseDownHandler, false);
-		resizeCanvas();
-		initCharWidth();
-		window.setInterval("drawCursor();",1000);
+		//console.log(specialA);
 	}
 	function initCharWidth () {
 		ctx.font = font;
 		charWidth = ctx.measureText("M").width;
 	}
-<<<<<<< HEAD
-=======
 	function getNoteContents(noteId) {
 		var saveContent = "TestNoteContents\nBuggy buggy!! I'm a Bug!\nI'm a butterfly!\nI'm a ladybird!\nP\n \n \n \nP\n \n \n \nI'm all around your code and computer!!";
 		saveContentSplit = saveContent.match(/[^\r\n]+/g);
 		saveContent2Split = new Array();
-		
 		for (i = 0; i < saveContentSplit.length; i++) {
 			if (saveContentSplit[i][0] == "P") {
 				saveContent2Split[i] = "P100150test1.png";
@@ -85,7 +60,6 @@
 		var finalString = (saveContent.length).toString()+"\n"+saveContent+"\n"+saveContent2;
 		return finalString;
 	}
->>>>>>> working with textEdit
 	function mouseDownHandler(event) {
 		clearCursor();
 		mouseX = event.pageX;
@@ -96,23 +70,18 @@
 		drawCursor();
 	}
 	function initListen() {
-<<<<<<< HEAD
-		callOnLoad();
-		readFile(client);
-=======
 		canvas = document.getElementById("canvas1");
 		ctx = canvas.getContext('2d');
-		window.addEventListener('resize', resizeCanvas, true);
+		window.addEventListener('resize', resizeCanvas, false);
 		canvas.addEventListener("mousedown", mouseDownHandler, false);
 		resizeCanvas();
 		initCharWidth();
 		window.setInterval("drawCursor();",1000);
->>>>>>> working with textEdit
 	};
 	function resizeCanvas() {
 		//var canvas = document.getElementById("canvas1");
-		newwidth = window.innerWidth * propX - topLeftX;
-		newheight = window.innerHeight * propY - topLeftY;
+		newwidth = window.innerWidth - topLeftX;
+		newheight = window.innerHeight - topLeftY;
 		if (newwidth > canvas.width) {
 			canvas.width = newwidth;
 		}
@@ -135,31 +104,12 @@
 			cursorX = 0;
 		}
 	}
-	function displayfinalimage(strData,currX,currY,imagename) {
+	function helperImage(imagename,currX,currY) {
 		var imageObj = new Image();
 		imageObj.onload = function() {
 			ctx.drawImage(imageObj,currX,currY);
 		}
-		imageObj.src = strData;
-		imageHash[imagename] = imageObj;
-	}
-	function helperImage(imagename,currX,currY) {
-		if (imageHash.hasOwnProperty(imagename)) {
-			var imageObj = imageHash[imagename];
-			ctx.drawImage(imageObj,currX,currY);
-			return;
-		}
-		console.log(imagename);
-		var h = new Object();
-		h['download'] = true;
-		client.makeUrl(imagename, h, function(error,publicUrl) {
-                if (error){
-                    return showError(error); // Cannot read the file :(
-                }
-                else{
-                    displayfinalimage(publicUrl.url,currX,currY,imagename);
-                }
-            });
+		imageObj.src = imagename;
 	}
 	function writeCanvas() {
 		initCharWidth();
@@ -230,6 +180,7 @@
 	};
 	document.onkeydown = function(evt) {
 	    evt = evt || window.event;
+	    //console.log(evt.ctrlKey + " " + evt.keyCode);
 	    if (evt.ctrlKey == false) {
 	    	clearCursor();
 	    	switch(evt.keyCode) {
@@ -331,6 +282,7 @@
 	};
 	document.onkeypress = function(evt) {
 	    evt = evt || window.event;
+	    //console.log("keyPress:" + evt.which + " " + evt.keyCode);
 	    if (evt.ctrlKey == false) {
 	    	clearCursor();
 	    	switch(evt.which) {
@@ -343,6 +295,7 @@
 					line = lineA[cursorY];
 					lineA[cursorY] = line.substring(0,cursorX) + character + line.substring(cursorX);
 					specialA[cursorY] = specialA[cursorY].substring(0,cursorX) + mode + specialA[cursorY].substring(cursorX);
+					//console.log(specialA[cursorY]);
 					cursorX += 1;
 					writeCanvas();
 					if (evt.which == 32) {
@@ -388,39 +341,4 @@
 		}
 		//console.log(mode);
 	}
-	/*
-	function insertImage() {
-		pixX = 0;
-		pixY = 0;
-		imageName = "";
-		lines = pixY/charHeight;
-		picFormat = "P"+pixX+pixY
-		lineA.splice(currY,1,"")
-		for (int i = 0; i < lines - 1; i++) {
-			lineA.splice()
-		}
-	}
-	*/
-	</script>
-</head>
-<body onLoad="initListen();">
-<input type="button" value="Previous Page" onClick="prevPage();"/>
-<input type="button" value="Next Page" onClick="nextPage();"/>
-<input type="button" value="Export to text file" onClick="exportFile();"/>
-<select id="fontname" name="mydropdown" onChange="updateFont();">
-<option value="Courier">Courier</option>
-<option value="Lucida Console">Lucida Console</option>
-<option value="Arial">Arial</option>
-<option value="Monaco">Monaco</option>
-<option value="Times New Roman">Times New Roman</option>
-<option value="Consolas">Consolas</option>
-</select>
-<input id="fontsize" type="text" value="20" onBlur="updateFont();">
-<a href="javascript:boldToggle();"><b>B</b></a>
-<a href="javascript:italicToggle();"><i>I</i></a>
-Insert Picture: <input id="file" type="file" name="fileupload" class="image" value="Insert Image"/><br>
-<br>
-<canvas width="100%" height="100%" id="canvas1" style="position: absolute; left: 0; top: 30; z-index: 0;border:1px solid #FF0000;">
-</canvas>
-</body>
-</html>
+}

@@ -1,7 +1,6 @@
 // Dropbox authentication 
-var client;
-function callOnLoad() {
-    client = new Dropbox.Client({
+$(document).ready(function(){
+    var client = new Dropbox.Client({
         key: "NJo05Ex2ifA=|FuwYACznlMDmTchIp4AN5qegZ1KCzwMiNKfAjSspvw=="
     });
     client.authDriver(new Dropbox.Drivers.Redirect({rememberUser: true}));
@@ -37,7 +36,7 @@ function callOnLoad() {
         //doSomethingCool(client);
         
     });
-};
+
     //alert("Client");
     var showError = function(error) {
         switch (error.status) {
@@ -135,21 +134,15 @@ function callOnLoad() {
     };
 
     //read a file from the Dropbox account
-
-
     var readFile = function(client){
-        var filename = "exported1.txt";
+        var filename = prompt("Enter absolute path of dropbox file?");
         if (filename.length){
             client.readFile(filename, function(error,strData,stat) {
                 if (error){
                     return showError(error); // Cannot read the file :(
                 }
                 else{
-<<<<<<< HEAD
-                    unpackData(strData);
-=======
                     $("#notecontents")[0].value = strData;
->>>>>>> working with textEdit
                 }
             });
         }
@@ -158,6 +151,7 @@ function callOnLoad() {
         }
     };
 
+});
 
 
 

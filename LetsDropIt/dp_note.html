@@ -5,17 +5,27 @@
 	<script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="dropbox.min.js"></script>
     <script type="text/javascript" src="save_note.js"></script>
+    
     <link rel="stylesheet" type="text/css" href="dp_notestyle.css">
+    <!--<script type="text/javascript" src="text_edit.js"></script>-->
 </head>
 
-<body>
+<body onLoad="initListen();">
 	<form action="" method="post" name="noteform">
         Note: <textarea id="notecontents" placeholder="Type your notes here" cols="100" rows="20" ></textarea> <br>
     </form>
     <!--<input id="textbox" type="image" src="savebutton.png" height="10%" width="9%" />-->
+    <!--<a href="javascript:boldToggle();"><b>B</b></a>
+    <a href="javascript:italicToggle();"><i>I</i></a>-->
+
+  <!--  <canvas width="150" height="150" id="canvas1" style="position: absolute; left: 100; top: 30; z-index: 0;border:1px solid #FF0000;">
+    </canvas>
+
+    <canvas id="canvas1" width="150" height="150" style="position: absolute; left: 100; top: 30; z-index: 0;border:1px solid #FF0000;">></canvas>
+    -->
     <div id="textbox"><br/>Save</div>
     <div id="mkdir"><br/>Make directory</div>
     <div id="delFile"><br/>Delete File</div>
     <div id="readFile"><br/>Read File</div>
-</body>
+
 </html>

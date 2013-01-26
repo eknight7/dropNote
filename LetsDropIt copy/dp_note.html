@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Trying JQuery</title>
+	<script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="dropbox.min.js"></script>
+    <!--<script type="text/javascript" src="save_note.js"></script>-->
+    
+    <!--<link rel="stylesheet" type="text/css" href="dp_notestyle.css">-->
+    <script type="text/javascript" src="text_edit.js"></script>
+</head>
+<body onLoad="initListen();">
+<input type="button" value="Previous Page" onClick="prevPage();"/>
+<input type="button" value="Next Page" onClick="nextPage();"/>
+<input type="button" value="Export to text file" onClick="exportFile();"/>
+<a href="javascript:boldToggle();"><b>B</b></a>
+<a href="javascript:italicToggle();"><i>I</i></a>
+Insert Picture: <input id="file" type="file" name="fileupload" class="image" value="Insert Image"/><br>
+<br>
+<canvas width="150" height="150" id="canvas1" style="position: absolute; left: 400; top: 30; z-index: 0;border:1px solid #FF0000;">
+</canvas>
+</body>
+</html>
