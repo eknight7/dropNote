@@ -136,7 +136,7 @@
 	};
 	document.onkeydown = function(evt) {
 	    evt = evt || window.event;
-	    //console.log(evt.ctrlKey + " " + evt.keyCode);
+	    console.log(evt.ctrlKey + " " + evt.keyCode);
 	    if (evt.ctrlKey == false) {
 	    	clearCursor();
 	    	switch(evt.keyCode) {
@@ -216,14 +216,16 @@
 	};
 	document.onkeypress = function(evt) {
 	    evt = evt || window.event;
-	    //console.log(evt.ctrlKey + " " + evt.keyCode);
+	    console.log("keyPress:" + evt.which + " " + evt.keyCode);
 	    if (evt.ctrlKey == false) {
 	    	clearCursor();
-	    	switch(evt.keyCode) {
+	    	switch(evt.which) {
 	    		case 13:
 	    			break;
+	    		case 0:
+	    			break;
 	    		default:
-					var character = String.fromCharCode(evt.keyCode);
+					var character = String.fromCharCode(evt.which);
 					line = lineA[cursorY];
 					lineA[cursorY] = line.substring(0,cursorX) + character + line.substring(cursorX);
 					specialA[cursorY] = specialA[cursorY].substring(0,cursorX) + mode + specialA[cursorY].substring(cursorX);
