@@ -42,9 +42,7 @@
 		textlength = parseInt(data);
 		lengthtextlength = textlength.toString().length+1;
 		lineA = data.substring(lengthtextlength,lengthtextlength+textlength).match(/[^\r\n]+/g);
-		console.log(lineA);
 		specialA = data.substring(lengthtextlength+textlength).match(/[^\r\n]+/g);
-		console.log(specialA);
 		canvas = document.getElementById("canvas1");
 		ctx = canvas.getContext('2d');
 		window.addEventListener('resize', resizeCanvas, false);
@@ -56,22 +54,6 @@
 	function initCharWidth () {
 		ctx.font = font;
 		charWidth = ctx.measureText("M").width;
-	}
-	function getNoteContents(noteId) {
-		var saveContent = "TestNoteContents\nBuggy buggy!! I'm a Bug!\nI'm a butterfly!\nI'm a ladybird!\nP\n \n \n \nP\n \n \n \nI'm all around your code and computer!!";
-		saveContentSplit = saveContent.match(/[^\r\n]+/g);
-		saveContent2Split = new Array();
-		for (i = 0; i < saveContentSplit.length; i++) {
-			if (saveContentSplit[i][0] == "P") {
-				saveContent2Split[i] = "P100150test1.png";
-			}
-			else {
-				saveContent2Split[i] = Array(saveContentSplit[i].length+1).join("N");
-			}
-		}
-		saveContent2 = saveContent2Split.join("\n");
-		var finalString = (saveContent.length).toString()+"\n"+saveContent+"\n"+saveContent2;
-		return finalString;
 	}
 	function mouseDownHandler(event) {
 		clearCursor();
@@ -112,12 +94,25 @@
 			cursorX = 0;
 		}
 	}
-	function helperImage(imagename,currX,currY) {
+	function displayfinalimage(strData,currX,currY) {
 		var imageObj = new Image();
 		imageObj.onload = function() {
 			ctx.drawImage(imageObj,currX,currY);
 		}
-		imageObj.src = imagename;
+		imageObj.src = strData;
+	}
+	function helperImage(imagename,currX,currY) {
+		console.log(imagename);
+		var h = new Object();
+		h['download'] = true;
+		client.makeUrl(imagename, h, function(error,publicUrl) {
+                if (error){
+                    return showError(error); // Cannot read the file :(
+                }
+                else{
+                    displayfinalimage(publicUrl.url,currX,currY);
+                }
+            });
 	}
 	function writeCanvas() {
 		initCharWidth();
@@ -188,7 +183,6 @@
 	};
 	document.onkeydown = function(evt) {
 	    evt = evt || window.event;
-	    //console.log(evt.ctrlKey + " " + evt.keyCode);
 	    if (evt.ctrlKey == false) {
 	    	clearCursor();
 	    	switch(evt.keyCode) {
@@ -290,7 +284,6 @@
 	};
 	document.onkeypress = function(evt) {
 	    evt = evt || window.event;
-	    //console.log("keyPress:" + evt.which + " " + evt.keyCode);
 	    if (evt.ctrlKey == false) {
 	    	clearCursor();
 	    	switch(evt.which) {
@@ -303,7 +296,6 @@
 					line = lineA[cursorY];
 					lineA[cursorY] = line.substring(0,cursorX) + character + line.substring(cursorX);
 					specialA[cursorY] = specialA[cursorY].substring(0,cursorX) + mode + specialA[cursorY].substring(cursorX);
-					//console.log(specialA[cursorY]);
 					cursorX += 1;
 					writeCanvas();
 					if (evt.which == 32) {
