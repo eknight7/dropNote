@@ -1,18 +1,21 @@
 <html>
 <head>
-	<style type = "text/css">
-	.inputnote {width:90%;height:90%;text-align:top;}
-	</style>
 	<script>
-		var clearNote = function() {
-			noteForm = document.forms['noteform'];
-			noteForm.elements["note"].value = "";
+		var glNoteId = parseInt(window.name);
+		var readNoteContents = function(noteIndex) {
+			return "TESTNOTECONTENTS";
 		};
+		var showNotes = function() {
+			notecontents = readNoteContents(glNoteId);
+			document.getElementById("viewnote").innerHTML = readNoteContents();
+		};
+		var gotoeditpage = function() {
+			location.href = "edit.html";
+		}
 	</script>
 </head>
-<body>
-	<form action="" method="post" name="noteform">
-		Note: <input type="text" value="Type your notes here..." name="note" onclick="clearNote();" class="inputnote"> <br>
-		<input type="button" value="Save" onclick="save();">
-	</form>
+<body onLoad="showNotes();">
+<div id="viewnote"></div>
+<input type="image" src="editbutton.png" height="15%" width="12%" onclick="gotoeditpage();">
 </body>
+</html>

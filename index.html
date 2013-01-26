@@ -1,9 +1,19 @@
 <html>
 <head>
+	<script>
+		window.name = "-1";
+		var openNote = function(noteNumber) {
+			var noteframe = document.getElementById("slack");
+			noteframe.width = 100;
+			noteframe.height = 100;
+		}
+	</script>
 </head>
-<body>
-	<form action="" method="post" name="noteform">
-		Note: <input type="text" value="Type your notes here..." name="note" onclick="clear();"> <br>
-		<input type="button" value="Save" onclick="save();">
-	</form>
-</body>
+<frameset cols="25%, 80%">
+	<frameset rows="120, 200">
+		<frame src="folders.html">
+		<frame src="tags.html">
+	</frameset>
+	<frame src="note.html"></frame>
+</frameset>
+</html>

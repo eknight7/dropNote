@@ -1,0 +1,30 @@
+<html>
+<head>
+	<style type = "text/css">
+	.inputnote {width:90%;height:85%;text-align:top;}
+	</style>
+	<script>
+		var glNoteId = parseInt(window.name);
+		var firstOpenFlag = true;
+		var clearNote = function() {
+			if (firstOpenFlag) {
+				firstOpenFlag = false;
+				noteForm = document.forms['noteform'];
+				noteForm.elements["note"].value = "";
+			}
+		};
+		var saveNote = function() {
+			//SAVE HERE
+		};
+	</script>
+</head>
+<body>
+	<form action="" method="post" name="noteform">
+		Note: <input type="text" value="Type your notes here..." name="note" onclick="clearNote();" class="inputnote"> <br>
+
+		Upload Image: <input id="file" type="file" name="fileupload" class="image"/><br>
+		<input type="image" src="savebutton.png" height="10%" width="9%" onclick="saveNote();"/>
+		<a href="note.html"> <img height="10%" width="9%" src= "backbutton.png"> 		</a>
+	</form>
+
+</body>

@@ -1,0 +1,25 @@
+<html>
+<head>
+	<script>
+		var openNote = function(noteNumber) {
+			alert("Opening note");
+			var noteframe = document.getElementById("slack"),
+			  left = 0,
+			  timer;
+			timer = setInterval(function() {
+				noteframe.style.left = (left += 10) + "px";
+				if (left == 500) {
+					clearInterval(timer);
+				}
+			}, 15);
+		}
+	</script>
+</head>
+<frameset cols="25%, 80%">
+	<frameset rows="120, 200">
+		<frame src="folders.html">
+		<frame src="tags.html">
+	</frameset>
+	<frame id ="slack" src="note.html"></frame>
+</frameset>
+</html>
