@@ -17,7 +17,10 @@ $(document).ready(function(){
             e.preventDefault();
             saveNote(client);
         });
-
+        $("#mkdir").on('click',function(e){
+            e.preventDefault();
+            makeDirectory(client);
+        });
         // Replace with a call to your own application code.
         //
         // The user authorized your app, and everything went well.
@@ -26,7 +29,7 @@ $(document).ready(function(){
         
     });
 
-    alert("Client");
+    //alert("Client");
     var showError = function(error) {
         switch (error.status) {
             case 401:
@@ -75,6 +78,9 @@ $(document).ready(function(){
 
     // save the note 
     var saveNote = function(client){
+        //var glNoteId = window.name; // what the note is going to be saved as
+        //var glNoteId = "text_save.txt";
+        var glNoteId = prompt("Save as?(.txt)", "text_new_file.txt");
         text = $("#notecontents");
         if (text.length){
             text = text[0].value;
@@ -86,6 +92,21 @@ $(document).ready(function(){
         }
         else{
             alert("No text to save :( ");
+        }
+    };
+
+    // make a new directory
+    var makeDirectory = function(client){
+        var dirName = prompt("New Directory Name?", "newDir");
+        if (dirName.length){
+            client.mkdir(dirName, function(error, stat) {
+                if (error) {
+                    return showError(error); // Something went wrong :(
+                }
+            });
+        }
+        else{
+            alert("No directory name :( ");
         }
     };
 
