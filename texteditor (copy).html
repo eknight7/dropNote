@@ -1,0 +1,308 @@
+<html>
+<head>
+	<script>
+	var topLeftX = 0;
+	var topLeftY = 50;
+	var mouseYoffset = 30;
+	var cursorX = 0;
+	var cursorY = 0;
+	var basefont = "20px Courier";
+	var font = basefont;
+	var boldfont = "bold " + basefont;
+	var italicfont = "italic " + basefont;
+	var bolditalicfont = "bold italic " + basefont;
+	var charHeight = 25;
+	var charWidth = 0;
+	var canvas;
+	var ctx;
+	var cursorToggle = true;
+	var mode = "N";
+	glNoteId = parseInt(window.name);
+	var buffer = getNoteContents(glNoteId);
+	var lineA = buffer.match(/[^\r\n]+/g);
+	var specialA = new Array();
+	for (i = 0; i < lineA.length; i++) {
+		specialA[i] = Array(lineA[i].length+1).join("N");
+	}
+	function exportFile() {
+		var saveContent = lineA.join("\n");
+		var saveContent2 = specialA.join("\n");
+		var finalString = (saveContent.length).toString+"\n"+saveContent+"\n"+saveContent2;
+		var exportContent = "data:application/octet-stream," + encodeURIComponent(finalString);
+		newWindow=window.open(exportContent, 'Exported file');
+	}
+	function saveToDropBox() {
+		var saveContent = lineA.join("\n");
+		var saveContent2 = specialA.join("\n");
+		var finalString = (saveContent.length).toString+"\n"+saveContent+"\n"+saveContent2;
+		//Saving code of finalString goes here!
+	}
+	function initCharWidth () {
+		ctx.font = font;
+		charWidth = ctx.measureText("M").width;
+	}
+	function getNoteContents(noteId) {
+		return "TestNoteContents\nBuggy buggy!! I'm a Bug!\nI'm a butterfly!\nI'm a ladybird!\nP100150test1.png\n?\n?\n?\nI'm all around your code and computer!!\n";
+	}
+	function mouseDownHandler(event) {
+		clearCursor();
+		mouseX = event.pageX;
+		mouseY = event.pageY - mouseYoffset;
+		cursorX = Math.round((mouseX-topLeftX)/charWidth);
+		cursorY = Math.round((mouseY-topLeftY)/charHeight);
+		fixCursor();
+		drawCursor();
+	}
+	function initListen() {
+		canvas = document.getElementById("canvas1");
+		ctx = canvas.getContext('2d');
+		window.addEventListener('resize', resizeCanvas, false);
+		canvas.addEventListener("mousedown", mouseDownHandler, false);
+		resizeCanvas();
+		initCharWidth();
+		window.setInterval("drawCursor();",1000);
+	};
+	function resizeCanvas() {
+		//var canvas = document.getElementById("canvas1");
+		canvas.width = window.innerWidth - topLeftX;
+		canvas.height = window.innerHeight - topLeftY;
+		writeCanvas(buffer);
+	}
+	function fixCursor() {
+		if (cursorY > lineA.length-1) {
+			cursorY = lineA.length-1;
+		}
+		if (cursorY < 0) {
+			cursorY = 0;
+		}
+		if (cursorX > lineA[cursorY].length) {
+			cursorX = lineA[cursorY].length;
+		}
+		if (cursorX < 0) {
+			cursorX = 0;
+		}
+	}
+	function writeCanvas() {
+		initCharWidth();
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		ctx.font = font;
+		var currX = topLeftX;
+		var currY = topLeftY;
+		var imageA = new Array();
+		var imageXA = new Array();
+		var imageYA = new Array();
+		var imageCount = 0;
+		for (i = 0; i < lineA.length; i++) {
+			var line = lineA[i];
+			if (line[0] == "P") {
+				var height = parseInt(line.substring(1,4));
+				var width = parseInt(line.substring(4,7));
+				var imagename = line.substring(7);
+				nextlines = Math.ceil(height/charHeight);
+				imageA[imageCount] = new Image();
+				imageXA[imageCount] = currX;
+				imageYA[imageCount] = currY;
+				imageA[imageCount].onload = function() {
+					ctx.drawImage(imageA[imageCount],imageXA[imageCount],imageYA[imageCount]);
+				}
+				imageA[imageCount].src = imagename;
+				currY += (nextlines-1)*charHeight;
+				imageCount++;
+			}
+			else {
+				for (j = 0; j < line.length; j++) {
+					if (specialA[i][j] == "N") {
+						ctx.font = basefont;
+					}
+					else if (specialA[i][j] == "B"){
+						ctx.font = boldfont;
+					}
+					else if (specialA[i][j] == "I"){
+						ctx.font = italicfont;
+					}
+					else if (specialA[i][j] == "C"){
+						ctx.font = bolditalicfont;
+					}
+					//console.log(specialA[i][j]);
+					ctx.fillText(lineA[i][j],currX,currY);
+					currX += charWidth;
+				}
+			}
+			currX = topLeftX;
+			currY += charHeight;
+		}
+		drawCursor();
+	}
+	
+	function clearCursor() {
+		var origfill = ctx.fillStyle;
+		ctx.fillStyle = "rgb(255,255,255)";
+		ctx.fillText("_",topLeftX + cursorX*charWidth,topLeftY + cursorY*charHeight-1);
+		ctx.fillText("_",topLeftX + cursorX*charWidth,topLeftY + cursorY*charHeight+1);
+		ctx.fillText("_",topLeftX + cursorX*charWidth-1,topLeftY + cursorY*charHeight);
+		ctx.fillText("_",topLeftX + cursorX*charWidth+1,topLeftY + cursorY*charHeight);
+		ctx.fillText("_",topLeftX + cursorX*charWidth,topLeftY + cursorY*charHeight);
+		ctx.fillStyle = origfill;
+		cursorToggle = true;
+	}
+	
+	function drawCursor() {
+		if (cursorToggle) {
+			ctx.fillText("_",topLeftX + cursorX*charWidth,topLeftY + cursorY*charHeight);
+			cursorToggle = false;
+		}
+		else {
+			clearCursor();
+		}
+	};
+	document.onkeydown = function(evt) {
+	    evt = evt || window.event;
+	    //console.log(evt.ctrlKey + " " + evt.keyCode);
+	    if (evt.ctrlKey == false) {
+	    	clearCursor();
+	    	switch(evt.keyCode) {
+	    		case 38:
+	    			if (cursorY == 0) {
+	    				cursorY = 0;
+	    			}
+	    			else {
+	    				cursorY -= 1;
+	    			}
+	    			break;
+	    		case 37:
+	    			if (cursorX == 0) {
+	    				if (cursorY == 0) {
+	    					// do nothing
+	    				}
+	    				else {
+	    					cursorY-= 1;
+	    					cursorX = lineA[cursorY].length;
+	    				}
+	    			}
+	    			else {
+	    				cursorX -= 1;
+	    			}
+	    			break;
+	    		case 40:
+	    			if (cursorY == lineA.length) {
+	    				// do nothing
+	    			}
+	    			else {
+	    				cursorY += 1;
+	    			}
+	    			break;
+	    		case 39:
+	    			if (cursorX == lineA[cursorY].length) {
+	    				if (cursorY == lineA.length) {
+	    					// Do nothing
+	    				}
+	    				else {
+	    					cursorY++;
+	    					cursorX = 0;
+	    				}
+	    			}
+	    			else {
+	    				cursorX += 1;
+	    			}
+	    			break;
+	    		case 8: // Backspace
+					lineA[cursorY] = lineA[cursorY].substring(0,cursorX-1) + lineA[cursorY].substring(cursorX);
+					specialA[cursorY] = specialA[cursorY].substring(0,cursorX-1) + specialA[cursorY].substring(cursorX);
+					cursorX--;
+					writeCanvas();
+					break;
+				case 13: //Enter
+					newline = lineA[cursorY].substring(cursorX+1);
+					newspecialline = specialA[cursorY].substring(cursorX+1);
+					lineA[cursorY] = lineA[cursorY].substring(0,cursorX+1);
+					specialA[cursorY] = specialA[cursorY].substring(0,cursorX+1);
+					lineA.splice(cursorY+1,0,newline);
+					specialA.splice(cursorY+1,0,newspecialline);
+					cursorY += 1;
+					cursorX = 0;
+					break;
+				case 36: //Home
+					cursorX = 0;
+					break;
+				case 35: //End
+					cursorX = lineA[cursorY].length;
+					break;
+	    		default:
+
+	    	}
+	    }
+	   fixCursor();
+	   drawCursor();
+	   writeCanvas();
+	};
+	document.onkeypress = function(evt) {
+	    evt = evt || window.event;
+	    //console.log("keyPress:" + evt.which + " " + evt.keyCode);
+	    if (evt.ctrlKey == false) {
+	    	clearCursor();
+	    	switch(evt.which) {
+	    		case 13:
+	    			break;
+	    		case 0:
+	    			break;
+	    		default:
+					var character = String.fromCharCode(evt.which);
+					line = lineA[cursorY];
+					lineA[cursorY] = line.substring(0,cursorX) + character + line.substring(cursorX);
+					specialA[cursorY] = specialA[cursorY].substring(0,cursorX) + mode + specialA[cursorY].substring(cursorX);
+					//console.log(specialA[cursorY]);
+					cursorX += 1;
+					writeCanvas();
+
+	    	}
+	    }
+	};
+	
+	var boldflag = false;
+	var italicflag = false;
+	function boldToggle() {
+		if (boldflag) {
+			boldflag = false;
+		}
+		else {
+			boldflag = true;
+		}
+		updateMode();
+	}
+
+	function italicToggle() {
+		if (italicflag) {
+			italicflag = false;
+		}
+		else {
+			italicflag = true;
+		}
+		updateMode();
+	}
+	function updateMode() {
+		if (boldflag && italicflag) {
+			mode = "C";
+		}
+		else if (boldflag) {
+			mode = "B";
+		}
+		else if (italicflag) {
+			mode = "I";
+		}
+		else {
+			mode = "N";
+		}
+		//console.log(mode);
+	}
+	</script>
+</head>
+<body onLoad="initListen();">
+<input type="button" value="Export to text file" onClick="exportFile();"/>
+<a href="javascript:boldToggle();"><b>B</b></a>
+<a href="javascript:italicToggle();"><i>I</i></a>
+Insert Picture: <input id="file" type="file" name="fileupload" class="image" value="Insert Image"/><br>
+<br>
+<canvas width="100%" height="100%" id="canvas1" style="position: absolute; left: 0; top: 30; z-index: 0;border:1px solid #FF0000;">
+</canvas>
+</body>
+</html>
