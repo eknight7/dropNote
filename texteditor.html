@@ -26,13 +26,13 @@
 	var specialA;
 	var imageHash = {};
 	function updateFont() {
-		console.log("Fire11");
 		basefont = document.getElementById("fontsize").value+"px "+document.getElementById("fontname").value;
 		font = basefont;
 		boldfont = "bold " + basefont;
 		italicfont = "italic " + basefont;
 		bolditalicfont = "bold italic " + basefont;
 		initCharWidth();
+		charHeight = parseInt(document.getElementById("fontsize").value) + 5;
 		writeCanvas();
 	}
 
@@ -394,7 +394,23 @@
 <option value="Times New Roman">Times New Roman</option>
 <option value="Consolas">Consolas</option>
 </select>
-<input id="fontsize" type="text" value="20" onBlur="updateFont();">
+<select id="fontsize" name="mydropdown" onChange="updateFont();">
+<option value="4">4</option>
+<option value="8">8</option>
+<option value="12">12</option>
+<option value="16">16</option>
+<option value="20">20</option>
+<option value="24">24</option>
+<option value="28">28</option>
+<option value="32">32</option>
+<option value="36">36</option>
+<option value="40">40</option>
+<option value="44">44</option>
+<option value="48">48</option>
+<option value="52">52</option>
+<option value="56">56</option>
+<option value="60">60</option>
+</select>
 <a href="javascript:boldToggle();"><b>B</b></a>
 <a href="javascript:italicToggle();"><i>I</i></a>
 Insert Picture: <input id="file" type="file" name="fileupload" class="image" value="Insert Image"/><br>
