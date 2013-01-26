@@ -21,6 +21,10 @@ $(document).ready(function(){
             e.preventDefault();
             makeDirectory(client);
         });
+        $("#delFile").on('click',function(e){
+            e.preventDefault();
+            deleteFile(client);
+        });
         // Replace with a call to your own application code.
         //
         // The user authorized your app, and everything went well.
@@ -107,6 +111,21 @@ $(document).ready(function(){
         }
         else{
             alert("No directory name :( ");
+        }
+    };
+
+    //delete a file
+    var deleteFile = function(client){
+        var filename = prompt("Delete which file?");
+        if (filename.length){
+            client.delete(filename, function(error,stat) {
+                if (error){
+                    return showError(error); // Cannot delete file :(
+                }
+            });
+        }
+        else{
+            slert("Not deleting any file!");
         }
     };
 
