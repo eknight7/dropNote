@@ -2,7 +2,7 @@
 <head>
 	<script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="dropbox.min.js"></script>
-    <script type="text/javascript" src="save_note1.js"></script>
+    <script type="text/javascript" src="save_note2.js"></script>
 	<script>
 	var topLeftX = 0;
 	var topLeftY = 50;
@@ -61,133 +61,6 @@
 		resizeCanvas();
 		initCharWidth();
 		window.setInterval("drawCursor();",1000);
-	canvas.onkeydown = function(evt) {
-	    evt = evt || window.event;
-	    if (evt.ctrlKey == false) {
-	    	clearCursor();
-	    	switch(evt.keyCode) {
-	    		case 38:
-	    			if (cursorY == 0) {
-	    				cursorY = 0;
-	    			}
-	    			else {
-	    				cursorY -= 1;
-	    			}
-	    			evt.preventDefault();
-	    			break;
-	    		case 37:
-	    			if (cursorX == 0) {
-	    				if (cursorY == 0) {
-	    					// do nothing
-	    				}
-	    				else {
-	    					cursorY-= 1;
-	    					cursorX = lineA[cursorY].length;
-	    				}
-	    			}
-	    			else {
-	    				cursorX -= 1;
-	    			}
-	    			evt.preventDefault();
-	    			break;
-	    		case 40:
-	    			if (cursorY == lineA.length) {
-	    				// do nothing
-	    			}
-	    			else {
-	    				cursorY += 1;
-	    			}
-	    			evt.preventDefault();
-	    			break;
-	    		case 39:
-	    			if (cursorX == lineA[cursorY].length) {
-	    				if (cursorY == lineA.length) {
-	    					// Do nothing
-	    				}
-	    				else {
-	    					cursorY++;
-	    					cursorX = 0;
-	    				}
-	    			}
-	    			else {
-	    				cursorX += 1;
-	    			}
-	    			evt.preventDefault();
-	    			break;
-	    		case 8: // Backspace
-	    			if (cursorX == 0) {
-	    				if (cursorY == 0) {
-	    					//Do nothing
-	    				}
-	    				else {
-	    					cursorY--;
-	    					cursorX = lineA[cursorY].length;
-	    					lineA[cursorY] = lineA[cursorY] + lineA[cursorY+1];
-	    					lineA.splice(cursorY+1,1);
-
-	    				}
-	    			}
-	    			else {
-					lineA[cursorY] = lineA[cursorY].substring(0,cursorX-1) + lineA[cursorY].substring(cursorX);
-					specialA[cursorY] = specialA[cursorY].substring(0,cursorX-1) + specialA[cursorY].substring(cursorX);
-					cursorX--;
-					}
-					evt.preventDefault();
-					writeCanvas();
-					break;
-				case 13: //Enter
-					newline = lineA[cursorY].substring(cursorX);
-					newspecialline = specialA[cursorY].substring(cursorX);
-					lineA[cursorY] = lineA[cursorY].substring(0,cursorX);
-					specialA[cursorY] = specialA[cursorY].substring(0,cursorX);
-					lineA.splice(cursorY+1,0,newline);
-					specialA.splice(cursorY+1,0,newspecialline);
-					cursorY += 1;
-					cursorX = 0;
-					evt.preventDefault();
-					break;
-				case 36: //Home
-					cursorX = 0;
-					evt.preventDefault();
-					break;
-				case 35: //End
-					cursorX = lineA[cursorY].length;
-					evt.preventDefault();
-					break;
-	    		default:
-
-	    	}
-	    }
-	   fixCursor();
-	   drawCursor();
-	   writeCanvas();
-	};
-	canvas.onkeypress = function(evt) {
-	    evt = evt || window.event;
-	    if (evt.ctrlKey == false) {
-	    	clearCursor();
-	    	switch(evt.which) {
-	    		case 13:
-	    			break;
-	    		case 0:
-	    			break;
-	    		default:
-					var character = String.fromCharCode(evt.which);
-					line = lineA[cursorY];
-					lineA[cursorY] = line.substring(0,cursorX) + character + line.substring(cursorX);
-					specialA[cursorY] = specialA[cursorY].substring(0,cursorX) + mode + specialA[cursorY].substring(cursorX);
-					cursorX += 1;
-					writeCanvas();
-					if (evt.which == 32) {
-						evt.preventDefault();
-					}
-	    	}
-	    }
-	};
-
-
-
-
 	}
 	function initCharWidth () {
 		ctx.font = font;
@@ -204,7 +77,14 @@
 	}
 	function initListen() {
 		callOnLoad();
-		readFile(client);
+		client.readFile("exported1.txt", function(error,strData,stat) {
+                if (error){
+                    return showError(error); // Cannot read the file :(
+                }
+                else{
+                    unpackData(strData);
+                }
+            });
 	};
 	function resizeCanvas() {
 		//var canvas = document.getElementById("canvas1");
@@ -375,6 +255,130 @@
 		}
 	}
 	*/
+	document.onkeydown = function(evt) {
+	    evt = evt || window.event;
+	    if (evt.ctrlKey == false) {
+	    	clearCursor();
+	    	switch(evt.keyCode) {
+	    		case 38:
+	    			if (cursorY == 0) {
+	    				cursorY = 0;
+	    			}
+	    			else {
+	    				cursorY -= 1;
+	    			}
+	    			evt.preventDefault();
+	    			break;
+	    		case 37:
+	    			if (cursorX == 0) {
+	    				if (cursorY == 0) {
+	    					// do nothing
+	    				}
+	    				else {
+	    					cursorY-= 1;
+	    					cursorX = lineA[cursorY].length;
+	    				}
+	    			}
+	    			else {
+	    				cursorX -= 1;
+	    			}
+	    			evt.preventDefault();
+	    			break;
+	    		case 40:
+	    			if (cursorY == lineA.length) {
+	    				// do nothing
+	    			}
+	    			else {
+	    				cursorY += 1;
+	    			}
+	    			evt.preventDefault();
+	    			break;
+	    		case 39:
+	    			if (cursorX == lineA[cursorY].length) {
+	    				if (cursorY == lineA.length) {
+	    					// Do nothing
+	    				}
+	    				else {
+	    					cursorY++;
+	    					cursorX = 0;
+	    				}
+	    			}
+	    			else {
+	    				cursorX += 1;
+	    			}
+	    			evt.preventDefault();
+	    			break;
+	    		case 8: // Backspace
+	    			if (cursorX == 0) {
+	    				if (cursorY == 0) {
+	    					//Do nothing
+	    				}
+	    				else {
+	    					cursorY--;
+	    					cursorX = lineA[cursorY].length;
+	    					lineA[cursorY] = lineA[cursorY] + lineA[cursorY+1];
+	    					lineA.splice(cursorY+1,1);
+
+	    				}
+	    			}
+	    			else {
+					lineA[cursorY] = lineA[cursorY].substring(0,cursorX-1) + lineA[cursorY].substring(cursorX);
+					specialA[cursorY] = specialA[cursorY].substring(0,cursorX-1) + specialA[cursorY].substring(cursorX);
+					cursorX--;
+					}
+					writeCanvas();
+					break;
+				case 13: //Enter
+					newline = lineA[cursorY].substring(cursorX);
+					newspecialline = specialA[cursorY].substring(cursorX);
+					lineA[cursorY] = lineA[cursorY].substring(0,cursorX);
+					specialA[cursorY] = specialA[cursorY].substring(0,cursorX);
+					lineA.splice(cursorY+1,0,newline);
+					specialA.splice(cursorY+1,0,newspecialline);
+					cursorY += 1;
+					cursorX = 0;
+					evt.preventDefault();
+					break;
+				case 36: //Home
+					cursorX = 0;
+					evt.preventDefault();
+					break;
+				case 35: //End
+					cursorX = lineA[cursorY].length;
+					evt.preventDefault();
+					break;
+	    		default:
+
+	    	}
+	    }
+	   fixCursor();
+	   drawCursor();
+	   writeCanvas();
+	};
+	document.onkeypress = function(evt) {
+	    evt = evt || window.event;
+	    if (evt.ctrlKey == false) {
+	    	clearCursor();
+	    	switch(evt.which) {
+	    		case 13:
+	    			break;
+	    		case 0:
+	    			break;
+	    		default:
+					var character = String.fromCharCode(evt.which);
+					line = lineA[cursorY];
+					lineA[cursorY] = line.substring(0,cursorX) + character + line.substring(cursorX);
+					specialA[cursorY] = specialA[cursorY].substring(0,cursorX) + mode + specialA[cursorY].substring(cursorX);
+					cursorX += 1;
+					writeCanvas();
+					if (evt.which == 32) {
+						evt.preventDefault();
+					}
+	    	}
+	    }
+	};
+
+
 	</script>
 </head>
 <body onLoad="initListen();">
